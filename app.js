@@ -7,7 +7,8 @@ const app = express();
 
 mongoose.set('strictQuery', false); // убираем варнинг mongoose
 
-app.use('/users', express.json(), require('./routes/users'));
+app.use('/users', require('./routes/users'));
+app.use('/cards', require('./routes/cards'));
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb')
   .then(() => {
