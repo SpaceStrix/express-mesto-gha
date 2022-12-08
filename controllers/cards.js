@@ -16,8 +16,9 @@ module.exports.deleteCard = (req, res) => {
 
 // Создание новой карточки POST
 module.exports.createCard = (req, res) => {
+  const idUser = req.user._id;
   const { name, link } = req.body;
-  Cards.create({ name, link })
+  Cards.create({ name, link, owner: idUser })
     .then((card) => res.send({ data: card }))
     .catch((err) => res.status(500).send({ message: err.message }));
 };
