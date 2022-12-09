@@ -8,13 +8,13 @@ const app = express();
 mongoose.set('strictQuery', false); // убираем варнинг mongoose
 
 app.use((req, res, next) => {
-  req.user = { _id: '63921b837ce71ff739acca59' };
+  req.user = { _id: '6390f87b0405512d5565fcf6' };
   next();
 });
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
-mongoose.connect('mongodb://localhost:27017/mestodb')
+mongoose.connect('mongodb://127.0.0.1:27017/mestodb')
   .then(() => {
     console.log('Successfully');
   }).catch(() => {
