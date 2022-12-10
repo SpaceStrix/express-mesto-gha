@@ -3,19 +3,19 @@ const mongoose = require('mongoose');
 const usersSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
+    required: [true, 'Имя не может быть пустым'],
+    minlength: [2, 'Имя слишком короткое'],
+    maxlength: [30, 'Имя слишком длинное'],
   },
   about: {
     type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
+    required: [true, 'Описание не может быть пустым'],
+    minlength: [2, 'Описание слишком короткое'],
+    maxlength: [30, 'Описание слишком длинное'],
   },
   avatar: {
     type: String,
-    required: true,
+    required: [true, 'Ссылка обязательна'],
   },
 });
 

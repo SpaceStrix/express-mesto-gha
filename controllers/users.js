@@ -1,53 +1,65 @@
-const Users = require('../models/users');
-const { BEDREQUEST, NOTFOUND, ENTERNALSERVER } = require('../ResStatus');
+const User = require('../models/users');
+const { BAD_REQUEST, NOT_FOUND, ENTERNAL_SERVER } = require('../ResStatus');
 // * Получаем всех пользователей
 module.exports.getAllUsers = (req, res) => {
-  Users.find({})
+  User.find({})
     .then((users) => res.send(users))
-    .catch((err) => res.status(500).send({ message: ENTERNALSERVER }));
+    .catch(() => res.status(500).send({ message: ENTERNAL_SERVER }));
 };
 // * Получаем пользователя
 module.exports.getUser = (req, res) => {
-  Users.findById(req.params.userId)
+  User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: NOTFOUND });
+        res.status(404).send({ message: NOT_FOUND });
         return;
       }
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: BEDREQUEST });
+        return res.status(400).send({ message: BAD_REQUEST });
       }
-      return res.status(500).send({ message: ENTERNALSERVER });
+      return res.status(500).send({ message: ENTERNAL_SERVER });
     });
 };
 
 // * Создаем пользователя
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
-  Users.create({ name, about, avatar })
+  User.create({ name, about, avatar })
     .then((user) => res.send(user))
-    .catch((err) => res.status(500).send({ message: ENTERNALSERVER }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: ENTERNAL_SERVER });
+      }
+      return res.status(500).send({ message: ENTERNAL_SERVER });
+    });
 };
 
 // * Обновление профиля
 module.exports.updateDataUser = (req, res) => {
-  const id = req.user._id;
-
   const { name, about } = req.body;
-  Users.findOneAndUpdate(id, { name, about }, { new: true })
+  User.findOneAndUpdate(req.user._id, { name, about }, { new: true })
     .then((newInfo) => res.send(newInfo))
-    .catch(() => res.status(500).send({ message: ENTERNALSERVER }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: BAD_REQUEST });
+      }
+      return res.status(500).send({ message: ENTERNAL_SERVER });
+    });
 };
 
 // * Обновление аватара
 module.exports.updateAvatarUser = (req, res) => {
-  const id = req.user._id;
-
   const { avatar } = req.body;
-  Users.findOneAndUpdate(id, { avatar }, { new: true })
+  User.findOneAndUpdate(req.user._id, { avatar }, { new: true })
     .then((newInfo) => res.send(newInfo))
-    .catch(() => res.status(500).send({ message: ENTERNALSERVER }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: BAD_REQUEST });
+      }
+      return res.status(500).send({ message: ENTERNAL_SERVER });
+    });
 };
+// err.message.split(':').at(-1)

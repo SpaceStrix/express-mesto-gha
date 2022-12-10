@@ -1,9 +1,9 @@
-const BEDREQUEST = '400 - Передан не корректный id';
-const NOTFOUND = '404 — Пользователь не найден';
-const ENTERNALSERVER = '500 - Ошибка по-умолчанию';
+const BAD_REQUEST = '400 - Переданы не корректные данные';
+const NOT_FOUND = '404 — Пользователь не найден';
+const ENTERNAL_SERVER = '500 - Сервер столкнулся с неожиданной ошибкой';
 
 module.exports = {
-  BEDREQUEST,
-  NOTFOUND,
-  ENTERNALSERVER,
+  BAD_REQUEST,
+  NOT_FOUND,
+  ENTERNAL_SERVER,
 };
