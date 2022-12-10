@@ -5,7 +5,7 @@ const {
 } = require('../controllers/users');
 
 router.get('/', getAllUsers); // Роут ко всем пользователям
-router.get('/:userId', getUser); // Роут ко всем пользователям
+router.get('/:userId', getUser); // Роут id пользователя
 router.post('/', express.json(), createUser); // Роут создания пользователя
 
 router.patch('/me', express.json(), updateDataUser);
