@@ -16,6 +16,7 @@ const usersSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: [true, 'Ссылка обязательна'],
+
   },
 });
 
