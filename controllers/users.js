@@ -58,7 +58,7 @@ module.exports.updateDataUser = (req, res) => {
 
 // * Обновление аватара
 module.exports.updateAvatarUser = (req, res) => {
-  const opts = { new: true };
+  const opts = { new: true, runValidators: true };
   const { avatar } = req.body;
   User.findOneAndUpdate(req.user._id, { avatar }, opts)
     .then((newInfo) => {

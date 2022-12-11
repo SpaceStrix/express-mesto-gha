@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
+
+// const urlRegExp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
 const usersSchema = new mongoose.Schema({
   name: {
@@ -16,6 +19,10 @@ const usersSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: [true, 'Ссылка обязательна'],
+    validate: {
+      validator: (v) => validator.isURL(v),
+      message: 'Поле "avatar" должно быть валидным url-адресом.',
+    },
 
   },
 });
