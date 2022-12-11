@@ -7,19 +7,19 @@ const validator = require('validator');
 const usersSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Имя не может быть пустым'],
-    minlength: [2, 'Имя слишком короткое'],
-    maxlength: [30, 'Имя слишком длинное'],
+    required: true,
+    minlength: 2,
+    maxlength: 30,
   },
   about: {
     type: String,
-    required: [true, 'Описание не может быть пустым'],
-    minlength: [2, 'Описание слишком короткое'],
-    maxlength: [30, 'Описание слишком длинное'],
+    required: true,
+    minlength: 2,
+    maxlength: 30,
   },
   avatar: {
     type: String,
-    required: [true, 'Ссылка обязательна'],
+    required: true,
     validate: {
       validator: (v) => validator.isURL(v),
       message: 'Поле "avatar" должно быть валидным url-адресом.',
