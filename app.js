@@ -21,17 +21,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb')
     console.log('Not Successfully');
   });
 
-// async function connect() {
-//   await mongoose.connect('mongodb://localhost:27017/mestodb')
-//     .then(() => {
-//       console.log('Successfully');
-//     }).catch(() => {
-//       console.log('Not Successfully');
-//     });
-//   await app.listen(PORT);
-//   console.log(`App listening on port ${PORT}`);
-// }
-// connect();
+app.use((req, res) => {
+  res.status(404).send('Sorry cant find that!');
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
