@@ -19,7 +19,7 @@ module.exports.getUser = (req, res) => {
       if (err.name === 'CastError') {
         return res.status(400).send({ message: '400 — Переданы некорректные данные' });
       }
-      res.status(500).send({ message: '500 — Ошибка по умолчанию.' });
+      return res.status(500).send({ message: '500 — Ошибка по умолчанию.' });
     });
 };
 
