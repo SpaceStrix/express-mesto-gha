@@ -21,8 +21,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb')
     console.log('Not Successfully');
   });
 
-app.use((req, res) => {
-  res.status(404).send('Sorry cant find that!');
+app.use((req, res, next) => {
+  res.status(404).send('not found');
+  next();
 });
 
 app.listen(PORT, () => {
