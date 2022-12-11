@@ -21,7 +21,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb')
     console.log('Not Successfully');
   });
 
-app.patch('/*', (req, res) => {
+app.patch('*', (req, res) => {
   res.send('what???', 404);
 });
 
