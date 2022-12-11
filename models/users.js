@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-// const urlRegExp = /(ftp|http|https):\/\/(\w+:{0,1}\w*
-// @)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-
 const usersSchema = new mongoose.Schema({
   name: {
     type: String,

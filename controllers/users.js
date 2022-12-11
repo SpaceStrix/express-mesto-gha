@@ -1,25 +1,32 @@
 const User = require('../models/users');
+const {
+  OK,
+  BAD_REQUES,
+  NOT_FOUND,
+  INTERNAL_SERVER,
+} = require('../constants');
+
 // * Получаем всех пользователей
 module.exports.getAllUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch(() => res.status(500).send({ message: '500 — Ошибка по умолчанию.' }));
+    .catch(() => res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' }));
 };
 // * Получаем пользователя
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: '404 — Пользователь по указанному _id не найден.' });
+        res.status(NOT_FOUND).send({ message: '404 — Пользователь по указанному _id не найден.' });
         return;
       }
-      res.status(200).send(user);
+      res.status(OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: '400 — Переданы некорректные данные' });
+        return res.status(BAD_REQUES).send({ message: '400 — Переданы некорректные данные' });
       }
-      return res.status(500).send({ message: '500 — Ошибка по умолчанию.' });
+      return res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' });
     });
 };
 
@@ -30,9 +37,9 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: '400 — Переданы некорректные данные при создании пользователя.' });
+        return res.status(BAD_REQUES).send({ message: '400 — Переданы некорректные данные при создании пользователя.' });
       }
-      return res.status(500).send({ message: '500 — Ошибка по умолчанию.' });
+      return res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' });
     });
 };
 
@@ -43,16 +50,16 @@ module.exports.updateDataUser = (req, res) => {
   User.findOneAndUpdate(req.user._id, { name, about }, opts)
     .then((newInfo) => {
       if (!newInfo) {
-        res.status(404).send({ message: '404 — Пользователь c указанном _id не найден.' });
+        res.status(NOT_FOUND).send({ message: '404 — Пользователь c указанном _id не найден.' });
         return;
       }
-      res.status(200).send(newInfo);
+      res.status(OK).send(newInfo);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: '400 — Переданы некорректные данные при обновлении профиля.' });
+        return res.status(BAD_REQUES).send({ message: '400 — Переданы некорректные данные при обновлении профиля.' });
       }
-      return res.status(500).send({ message: '500 — Ошибка по умолчанию.' });
+      return res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' });
     });
 };
 
@@ -63,16 +70,15 @@ module.exports.updateAvatarUser = (req, res) => {
   User.findOneAndUpdate(req.user._id, { avatar }, opts)
     .then((newInfo) => {
       if (!newInfo) {
-        res.status(404).send({ message: '404 — Пользователь c указанном _id не найден.' });
+        res.status(NOT_FOUND).send({ message: '404 — Пользователь c указанном _id не найден.' });
         return;
       }
-      res.status(200).send(newInfo);
+      res.status(OK).send(newInfo);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: '400 — Переданы некорректные данные при обновлении аватара.' });
+        return res.status(BAD_REQUES).send({ message: '400 — Переданы некорректные данные при обновлении аватара.' });
       }
-      return res.status(500).send({ message: '500 — Ошибка по умолчанию.' });
+      return res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' });
     });
 };
-// err.message.split(':').at(-1)
