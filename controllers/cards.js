@@ -18,7 +18,12 @@ module.exports.deleteCard = (req, res) => {
       }
       res.status(200).send(card);
     })
-    .catch(() => res.status(500).send({ message: '500 — Ошибка по умолчанию.' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: '400 — Переданы некорректные данные для постановки/снятии лайка.' });
+      }
+      return res.status(500).send({ message: '500 — Ошибка по умолчанию.' });
+    });
 };
 
 // * Создание новой карточки
