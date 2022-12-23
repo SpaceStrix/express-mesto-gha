@@ -1,10 +1,14 @@
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const User = require('../models/users');
+
 const {
   OK,
   BAD_REQUES,
+  UNAUTHORIZED,
   NOT_FOUND,
   INTERNAL_SERVER,
-} = require('../constants');
+} = require('../utils/constants');
 
 // * Получаем всех пользователей
 module.exports.getAllUsers = (req, res) => {
@@ -33,21 +37,19 @@ module.exports.getUser = (req, res) => {
 // * Создаем пользователя
 module.exports.createUser = (req, res) => {
   const {
-    name,
-    about,
-    avatar,
-    email,
-    password,
+    name, about, avatar, email, password,
   } = req.body;
-  console.log(name);
-  User.create({
-    name,
-    about,
-    avatar,
-    email,
-    password,
-  })
-    .then((user) => res.send(user))
+
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => {
+      User.create({
+        name, about, avatar, email, password: hash,
+      });
+    })
+    .then((user) => {
+      res.send(user);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(BAD_REQUES).send({ message: '400 — Переданы некорректные данные при создании пользователя.' });
@@ -93,5 +95,16 @@ module.exports.updateAvatarUser = (req, res) => {
         return res.status(BAD_REQUES).send({ message: '400 — Переданы некорректные данные при обновлении аватара.' });
       }
       return res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' });
+    });
+};
+
+// * Авторизация
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => res.send({ token: jwt.sign({ _id: user._id }, 'fluffy-law', { expiresIn: '7d' }) }))
+    .catch((err) => {
+      res.status(UNAUTHORIZED).send({ message: err.message });
     });
 };

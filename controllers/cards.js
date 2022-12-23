@@ -4,7 +4,7 @@ const {
   BAD_REQUES,
   NOT_FOUND,
   INTERNAL_SERVER,
-} = require('../constants');
+} = require('../utils/constants');
 
 // * Получаем все карточки
 module.exports.getAllCards = (req, res) => {

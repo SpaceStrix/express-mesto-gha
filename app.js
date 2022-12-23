@@ -10,7 +10,7 @@ mongoose.set('strictQuery', false); // убираем варнинг mongoose
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use((req, res, next) => {
-  req.user = { _id: '6390f87b0405512d5565fcf6' };
+  req.user = { _id: '63a44d12996398eec59073d1' };
   next();
 });
 
