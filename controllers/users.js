@@ -16,7 +16,7 @@ module.exports.getAllUsers = (req, res) => {
     .then((users) => res.send(users))
     .catch(() => res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' }));
 };
-// * Получаем пользователя
+// * Получаем пользователя по ID
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
@@ -32,6 +32,13 @@ module.exports.getUser = (req, res) => {
       }
       return res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' });
     });
+};
+
+// * Получаем информацию о пользователе
+module.exports.getUserInfo = (req, res) => {
+  User.findById(req.user._id)
+    .then((user) => res.send(user))
+    .catch((err) => res.status(INTERNAL_SERVER).send({ message: `Произошла ошибка ${err.name}` }));
 };
 
 // * Создаем пользователя
