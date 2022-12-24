@@ -22,7 +22,6 @@ module.exports.getUser = (req, res) => {
     .then((user) => {
       if (!user) {
         res.status(NOT_FOUND).send({ message: '404 — Пользователь по указанному _id не найден.' });
-        return;
       }
       res.status(OK).send(user);
     })
@@ -38,7 +37,7 @@ module.exports.getUser = (req, res) => {
 module.exports.getUserInfo = (req, res) => {
   User.findById(req.user._id)
     .then((user) => res.send(user))
-    .catch((err) => res.status(INTERNAL_SERVER).send({ message: `Произошла ошибка ${err.name}` }));
+    .catch(() => res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' }));
 };
 
 // * Создаем пользователя
@@ -54,12 +53,13 @@ module.exports.createUser = (req, res) => {
         name, about, avatar, email, password: hash,
       });
     })
-    .then((user) => {
-      res.send(user);
-    })
+    .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(BAD_REQUES).send({ message: '400 — Переданы некорректные данные при создании пользователя.' });
+      }
+      if (err.code === 11000) {
+        return res.status(409).send({ message: '409 — Такой пользователь уже существует' });
       }
       return res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' });
     });

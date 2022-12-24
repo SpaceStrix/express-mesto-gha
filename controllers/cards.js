@@ -22,6 +22,10 @@ module.exports.deleteCard = (req, res) => {
         res.status(NOT_FOUND).send({ message: '404 — Карточка по указанному _id не найдена.' });
         return;
       }
+
+      if (!card.owner._id.equals(req.user._id)) {
+        return;
+      }
       res.status(OK).send(card);
     })
     .catch((err) => {
