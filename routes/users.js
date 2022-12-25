@@ -22,6 +22,10 @@ router.patch('/me', celebrate({
 }), updateDataUser);
 
 //* Редактирование аватарки пользователя
-router.patch('/me/avatar', updateAvatarUser);
+router.patch('/me/avatar', celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string(),
+  }),
+}), updateAvatarUser);
 
 module.exports = router;
