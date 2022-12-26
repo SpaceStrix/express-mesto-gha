@@ -1,15 +1,10 @@
 const Card = require('../models/cards');
-const {
-  OK,
-  CREATED,
-  BAD_REQUES,
-  NOT_FOUND,
-  INTERNAL_SERVER,
-} = require('../utils/constants');
 
 const NotFoundError = require('../errors/not-found-err');
 const ForbiddenError = require('../errors/forbidden-err');
 const BadRequest = require('../errors/bad-request-err');
+const CREATED = require('../errors/created-err');
+const OK = require('../errors/ok-err');
 
 // * Получаем все карточки
 module.exports.getAllCards = (req, res, next) => {
@@ -23,20 +18,14 @@ module.exports.getAllCards = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточка с указаным id не найден');
-      }
-      if (!card.owner._id.equals(req.user._id)) {
-        throw new ForbiddenError('Отказано в доступе');
-      } else {
-        card.remove();
-        res.status(OK).send({ message: 'Удалено' });
-      }
+      if (!card) throw new NotFoundError();
+      if (!card.owner._id.equals(req.user._id)) { throw new ForbiddenError(); }
+
+      card.remove();
+      throw new OK();
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные'));
-      }
+      if (err.name === 'CastError') next(new BadRequest());
       next(err);
     });
 };
@@ -45,14 +34,12 @@ module.exports.deleteCard = (req, res, next) => {
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.status(CREATED).send(card))
+    .then((card) => {
+      if (card) throw new CREATED();
+      res.send(card);
+    })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        // return res.status(BAD_REQUES).send({ message: '400 —
-        // Переданы некорректные данные при создании карточки.' });
-        next(new BadRequest('Переданы некорректные данные'));
-      }
-      // return res.status(INTERNAL_SERVER).send({ message: '500 — Ошибка по умолчанию.' });
+      if (err.name === 'ValidationError') next(new BadRequest());
       next(err);
     });
 };
@@ -65,15 +52,11 @@ module.exports.likeCard = (req, res, next) => {
     { new: true },
   )
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточка с указаным id не найден');
-      }
-      res.status(OK).send(card);
+      if (!card) throw new NotFoundError();
+      res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные'));
-      }
+      if (err.name === 'CastError') next(new BadRequest());
       next(err);
     });
 };
@@ -86,11 +69,11 @@ module.exports.dislikeCard = (req, res, next) => {
     { new: true },
   )
     .then((card) => {
-      if (!card) throw new NotFoundError('Карточка с указаным id не найден');
-      res.status(OK).send(card);
+      if (!card) throw new NotFoundError();
+      res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError') next(new BadRequest('Переданы некорректные данные'));
+      if (err.name === 'CastError') next(new BadRequest());
       next(err);
     });
 };
