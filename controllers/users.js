@@ -79,12 +79,10 @@ module.exports.updateDataUser = (req, res, next) => {
 
 // * Обновление аватара
 module.exports.updateAvatarUser = (req, res, next) => {
-  const opts = { new: true, runValidators: true };
   const { avatar } = req.body;
-  User.findOneAndUpdate(req.user._id, { avatar }, opts)
+  User.findOneAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((newInfo) => {
       if (!newInfo) { throw new NotFoundError(); }
-
       throw new OK();
     })
     .catch((err) => {
@@ -96,11 +94,7 @@ module.exports.updateAvatarUser = (req, res, next) => {
 // * Авторизация
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
-    .then((user) => res.status(200).send({ token: jwt.sign({ _id: user._id }, 'fluffy-law', { expiresIn: '7d' }) }))
-    .catch((err) => {
-      next(new Forbidden());
-      next(err);
-    });
+    .then((user) => res.send({ token: jwt.sign({ _id: user._id }, 'fluffy-law', { expiresIn: '7d' }) }))
+    .catch(() => next(new Forbidden()));
 };
