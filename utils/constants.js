@@ -1,4 +1,5 @@
 const OK = 200;
+const CREATED = 201;
 const BAD_REQUES = 400;
 const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
@@ -6,6 +7,7 @@ const INTERNAL_SERVER = 500;
 
 module.exports = {
   OK,
+  CREATED,
   BAD_REQUES,
   UNAUTHORIZED,
   NOT_FOUND,
