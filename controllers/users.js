@@ -98,7 +98,7 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
-    .then((user) => res.send({ token: jwt.sign({ _id: user._id }, 'fluffy-law', { expiresIn: '7d' }) }))
+    .then((user) => res.status(200).send({ token: jwt.sign({ _id: user._id }, 'fluffy-law', { expiresIn: '7d' }) }))
     .catch((err) => {
       next(new Forbidden());
       next(err);
