@@ -3,11 +3,9 @@ const mongoose = require('mongoose');
 const { celebrate, Joi, errors } = require('celebrate');
 
 const router = require('./routes');
-
 const { createUser, login } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
-
 const app = express();
 
 mongoose.set('strictQuery', false); // убираем варнинг mongoose
