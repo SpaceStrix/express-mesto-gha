@@ -16,7 +16,10 @@ router.get('/', getAllCards);
 router.post('/', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required(),
+    link: Joi.string().required()
+      // eslint-disable-next-line no-useless-escape
+      .pattern(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/)
+      .message('Некорректная ссылка'),
   }),
 }), createCard);
 
@@ -30,14 +33,14 @@ router.delete('/:cardId', celebrate({
 //* Роут для утановки лайка
 router.put('/:cardId/likes', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum(),
+    cardId: Joi.string().alphanum().length(24),
   }),
 }), likeCard);
 
 //* Роут для удаления лайка
 router.delete('/:cardId/likes', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum(),
+    cardId: Joi.string().alphanum().length(24),
   }),
 }), dislikeCard);
 

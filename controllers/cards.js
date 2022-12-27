@@ -59,7 +59,7 @@ module.exports.likeCard = (req, res, next) => {
   )
     .then((card) => {
       if (!card) throw new NotFoundError();
-      res.send(card);
+      res.status(200).send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
