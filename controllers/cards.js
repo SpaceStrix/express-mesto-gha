@@ -38,8 +38,8 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => {
-      if (card) throw new CREATED();
-      res.send(card);
+      // if (card) throw new CREATED();
+      res.status(201).send(card);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -58,7 +58,7 @@ module.exports.likeCard = (req, res, next) => {
     { new: true },
   )
     .then((card) => {
-      if (!card) throw new NotFoundError();
+      // if (!card) throw new NotFoundError();
       res.status(200).send(card);
     })
     .catch((err) => {
