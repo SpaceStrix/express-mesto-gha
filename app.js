@@ -24,12 +24,19 @@ app.post('/signin', celebrate({
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).default('Жак-Ив Кусто'),
+    about: Joi.string().min(2).max(30).default('Исследователь'),
+    avatar: Joi.string().default('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png')
+      .pattern(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
+
   }),
 }), createUser);
 
 app.use(router);
+
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
@@ -42,8 +49,6 @@ app.use((err, req, res, next) => {
     });
   next();
 });
-
-app.use(errors());
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

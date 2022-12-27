@@ -55,11 +55,15 @@ module.exports.createUser = (req, res, next) => {
         password: hash,
       });
     })
-    .then((user) => res.send(user))
+    .then((user) => res.status(201).send(user))
     .catch((err) => {
-      if (err.code === '11000') next(new Conflict());
-      if (err.name === 'ValidationError') next(new BadRequest());
-      next(err);
+      if (err.code === 11000) {
+        next(new Conflict());
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
