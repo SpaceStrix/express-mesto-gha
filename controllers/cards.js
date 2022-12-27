@@ -25,8 +25,11 @@ module.exports.deleteCard = (req, res, next) => {
       throw new OK();
     })
     .catch((err) => {
-      if (err.name === 'CastError') next(new BadRequest());
-      next(err);
+      if (err.name === 'CastError') {
+        next(new BadRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -39,8 +42,11 @@ module.exports.createCard = (req, res, next) => {
       res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new BadRequest());
-      next(err);
+      if (err.name === 'ValidationError') {
+        next(new BadRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -56,8 +62,11 @@ module.exports.likeCard = (req, res, next) => {
       res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError') next(new BadRequest());
-      next(err);
+      if (err.name === 'CastError') {
+        next(new BadRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -73,7 +82,10 @@ module.exports.dislikeCard = (req, res, next) => {
       res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError') next(new BadRequest());
-      next(err);
+      if (err.name === 'CastError') {
+        next(new BadRequest());
+      } else {
+        next(err);
+      }
     });
 };

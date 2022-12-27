@@ -22,8 +22,11 @@ module.exports.getUser = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'CastError') next(new BadRequest());
-      next(err);
+      if (err.name === 'CastError') {
+        next(new BadRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -76,8 +79,11 @@ module.exports.updateDataUser = (req, res, next) => {
       res.status(OK).send(newInfo);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new BadRequest());
-      next(err);
+      if (err.name === 'ValidationError') {
+        next(new BadRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -90,8 +96,11 @@ module.exports.updateAvatarUser = (req, res, next) => {
       throw new OK();
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new BadRequest());
-      next(err);
+      if (err.name === 'ValidationError') {
+        next(new BadRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
