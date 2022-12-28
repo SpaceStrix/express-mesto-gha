@@ -8,6 +8,6 @@ const cardsRoutes = require('./cards');
 router.use('/users', auth, usersRoutes);
 router.use('/cards', auth, cardsRoutes);
 
-router.use('*', (req, res, next) => { next(new NotFoundError()); });
+router.use('*', (req, res, next) => { next(new NotFoundError('Указанный путь не найден')); });
 
 module.exports = router;

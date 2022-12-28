@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const { ObjectId } = require('mongoose').Types;
 
 const {
   getAllCards,
@@ -26,7 +27,11 @@ router.post('/', celebrate({
 //* Роут удаления карточки
 router.delete('/:cardId', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum(),
+    cardId: Joi.string().alphanum()
+      .custom((value, helpers) => {
+        if (ObjectId.isValid(value)) return value;
+        return helpers.message('Невалидный id');
+      }),
   }),
 }), deleteCard);
 
