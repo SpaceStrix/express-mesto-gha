@@ -91,7 +91,7 @@ module.exports.updateAvatarUser = (req, res, next) => {
   User.findOneAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((newInfo) => {
       if (!newInfo) { throw new NotFoundError('Пользователь с указанным id не найден'); }
-      throw new OK();
+      res.status(200).send(newInfo);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
