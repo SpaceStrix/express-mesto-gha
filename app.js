@@ -1,13 +1,12 @@
 require('dotenv').config();
-
 const express = require('express');
 const mongoose = require('mongoose');
 
 const { celebrate, Joi, errors } = require('celebrate');
-const { createUser, login } = require('./controllers/users');
 const router = require('./routes');
+const { createUser, login } = require('./controllers/users');
 
-const { PORT } = process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 
 mongoose.set('strictQuery', false); // убираем варнинг mongoose
