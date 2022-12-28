@@ -5,7 +5,6 @@ const User = require('../models/users');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequest = require('../errors/bad-request-err');
 const Conflict = require('../errors/conflict-err');
-const OK = require('../errors/ok-err');
 const Forbidden = require('../errors/unauthorized-js');
 
 // * Получаем всех пользователей
@@ -56,7 +55,14 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => res.status(201).send(user))
+    .then(() => {
+      res.status(201).send({
+        name,
+        about,
+        avatar,
+        email,
+      });
+    })
     .catch((err) => {
       if (err.code === 11000) {
         next(new Conflict('Email уже используется'));
