@@ -3,7 +3,7 @@ const Card = require('../models/cards');
 const NotFoundError = require('../errors/not-found-err');
 const ForbiddenError = require('../errors/forbidden-err');
 const BadRequest = require('../errors/bad-request-err');
-const OK = require('../errors/ok-err');
+// const OK = require('../errors/ok-err');
 
 // * Получаем все карточки
 module.exports.getAllCards = (req, res, next) => {
@@ -21,7 +21,7 @@ module.exports.deleteCard = (req, res, next) => {
       if (!card.owner._id.equals(req.user._id)) { throw new ForbiddenError('У вас нет прав'); }
 
       return Card.findByIdAndRemove(req.params.cardId)
-        .then((card) => {
+        .then(() => {
           res.status(200).send(card);
         });
 
