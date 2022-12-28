@@ -7,7 +7,7 @@ const { celebrate, Joi, errors } = require('celebrate');
 const { createUser, login } = require('./controllers/users');
 const router = require('./routes');
 
-const port = process.env.PORT || 3001;
+const { PORT } = process.env;
 const app = express();
 
 mongoose.set('strictQuery', false); // убираем варнинг mongoose
@@ -48,6 +48,6 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.listen(port, () => {
-  console.log(`Приложении запущено на ${port} порту`);
+app.listen(PORT, () => {
+  console.log(`Приложении запущено на ${PORT} порту`);
 });
