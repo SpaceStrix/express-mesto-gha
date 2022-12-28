@@ -18,12 +18,12 @@ module.exports.getAllUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
-      if (!user) throw new NotFoundError();
+      if (!user) throw new NotFoundError('Пользователь с указанным id не найден');
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest());
+        next(new BadRequest('Плохой запрос'));
       } else {
         next(err);
       }
@@ -59,9 +59,9 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new Conflict());
+        next(new Conflict('Email уже используется'));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequest());
+        next(new BadRequest('Плохой запрос'));
       } else {
         next(err);
       }
@@ -73,12 +73,12 @@ module.exports.updateDataUser = (req, res, next) => {
   const { name, about } = req.body;
   User.findOneAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((newInfo) => {
-      if (!newInfo) { throw new NotFoundError(); }
-      res.status(OK).send(newInfo);
+      if (!newInfo) { throw new NotFoundError('Пользователь с указанным id не найден'); }
+      res.status(200).send(newInfo);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest());
+        next(new BadRequest('Плохой запрос'));
       } else {
         next(err);
       }
@@ -90,12 +90,12 @@ module.exports.updateAvatarUser = (req, res, next) => {
   const { avatar } = req.body;
   User.findOneAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((newInfo) => {
-      if (!newInfo) { throw new NotFoundError(); }
+      if (!newInfo) { throw new NotFoundError('Пользователь с указанным id не найден'); }
       throw new OK();
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest());
+        next(new BadRequest('Плохой запрос'));
       } else {
         next(err);
       }
@@ -107,5 +107,5 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => res.send({ token: jwt.sign({ _id: user._id }, 'fluffy-law', { expiresIn: '7d' }) }))
-    .catch(() => next(new Forbidden()));
+    .catch(() => next(new Forbidden('Доступ запрещен')));
 };
