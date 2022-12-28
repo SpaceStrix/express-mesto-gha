@@ -3,7 +3,6 @@ const Card = require('../models/cards');
 const NotFoundError = require('../errors/not-found-err');
 const ForbiddenError = require('../errors/forbidden-err');
 const BadRequest = require('../errors/bad-request-err');
-// const OK = require('../errors/ok-err');
 
 // * Получаем все карточки
 module.exports.getAllCards = (req, res, next) => {
@@ -24,9 +23,6 @@ module.exports.deleteCard = (req, res, next) => {
         .then(() => {
           res.status(200).send(card);
         });
-
-      // card.remove();
-      // throw new OK('Карточка удалена');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -42,7 +38,6 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => {
-      // if (card) throw new CREATED('Карточка создана');
       res.status(201).send(card);
     })
     .catch((err) => {
