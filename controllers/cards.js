@@ -1,4 +1,5 @@
 const Card = require('../models/cards');
+const { OK, CREATED } = require('../utils/constants');
 
 const NotFoundError = require('../errors/not-found-err');
 const ForbiddenError = require('../errors/forbidden-err');
@@ -14,15 +15,14 @@ module.exports.getAllCards = (req, res, next) => {
 
 // * Удаление карточки
 module.exports.deleteCard = (req, res, next) => {
-  Card.findById(req.params.cardId)
+  Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) throw new NotFoundError('Карточка с указанным id не найдена');
-      if (!card.owner._id.equals(req.user._id)) { throw new ForbiddenError('У вас нет прав'); }
-
-      return Card.findByIdAndRemove(req.params.cardId)
-        .then(() => {
-          res.status(200).send(card);
-        });
+      if (!card.owner._id.equals(req.user._id)) {
+        throw new ForbiddenError('У вас нет прав');
+      } else {
+        res.status(OK).send(card);
+      }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -38,7 +38,7 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => {
-      res.status(201).send(card);
+      res.status(CREATED).send(card);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -58,7 +58,7 @@ module.exports.likeCard = (req, res, next) => {
   )
     .then((card) => {
       if (!card) throw new NotFoundError('Карточка с указанным id не найдена');
-      res.status(200).send(card);
+      res.status(OK).send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {

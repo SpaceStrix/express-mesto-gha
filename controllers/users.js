@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const User = require('../models/users');
-
+const { OK, CREATED } = require('../utils/constants');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequest = require('../errors/bad-request-err');
 const Conflict = require('../errors/conflict-err');
@@ -59,7 +59,7 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
     }))
     .then(() => {
-      res.status(201).send({
+      res.status(CREATED).send({
         name,
         about,
         avatar,
@@ -83,7 +83,7 @@ module.exports.updateDataUser = (req, res, next) => {
   User.findOneAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((newInfo) => {
       if (!newInfo) { throw new NotFoundError('Пользователь с указанным id не найден'); }
-      res.status(200).send(newInfo);
+      res.status(OK).send(newInfo);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -100,7 +100,7 @@ module.exports.updateAvatarUser = (req, res, next) => {
   User.findOneAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((newInfo) => {
       if (!newInfo) { throw new NotFoundError('Пользователь с указанным id не найден'); }
-      res.status(200).send(newInfo);
+      res.status(OK).send(newInfo);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

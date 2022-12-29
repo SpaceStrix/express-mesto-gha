@@ -8,7 +8,7 @@ const { handlerErr } = require('./middlewares/handlerErr');
 const { validationSignin, validationSignup } = require('./middlewares/validation');
 const { createUser, login } = require('./controllers/users');
 
-const { PORT, DB_CONNECT } = process.env;
+const { PORT = 3000, DB_CONNECT = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 const app = express();
 mongoose.set('strictQuery', false); // убираем варнинг mongoose
 mongoose.connect(DB_CONNECT);
